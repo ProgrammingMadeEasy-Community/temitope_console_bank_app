@@ -3,7 +3,6 @@ import fs from 'fs';
 
 
 let appData = {};
-
 console.log('***Welcome to Console Bank App***\n');
 // Initialize the appData for the application
 try{
@@ -162,8 +161,12 @@ const transfer = () => {
   if(account.status === 'locked'){
     console.log('\nYou cannot perform this transaction because your account is locked. Kindly contact customer care');
     const performAnotherOperation = readlineSync.keyInYNStrict('\nDo you want to perform another operation? Press Y for Yes and N for No: ');
-    performAnotherOperation ? displayBankingOptions() : console.log('\nThank you for using this app. Goodbye!...');
+    if(performAnotherOperation){
+      displayBankingOptions()
+    } else{ 
+      console.log('\nThank you for using this app. Goodbye!...');
     return;
+  }
   }
 
   let recipientAccountNumber = readlineSync.question('Enter Recipient Account Number: ');
@@ -221,9 +224,13 @@ if(!pinConfirmed){
 }
 
 account.accountBalance -= Number(amount);
+
 account.transactionHistory.push({type: 'Transfer', amount, date: new Date(), recipientAccountNumber, recipientAccountName: recipientAccount.accountName});
+
 recipientAccount.transactionHistory.push({type: 'Deposit', amount, date: new Date(), senderAccountNumber: account.accountNumber, senderAccountName: account.accountName});
+
 appData.transactions.push({type: 'Transfer', amount, date: new Date(), accountNumber, recipientAccountNumber, recipientAccountName: recipientAccount.accountName, senderAccountNumber: account.accountNumber, senderAccountName: account.accountName});
+
 appData.transactions.push({type: 'Deposit', amount, date: new Date(), senderAccountNumber: account.accountNumber, senderAccountName: account.accountName, recipientAccountNumber, recipientAccountName: recipientAccount.accountName});
 
 recipientAccount.accountBalance += Number(amount);
@@ -250,8 +257,12 @@ const withdraw = () => {
   if(account.status === 'locked'){
     console.log('\n*** You cannot perform this transaction because your account is locked. Kindly contact customer care ***');
     const performAnotherOperation = readlineSync.keyInYNStrict('\nDo you want to perform another operation? Press Y for Yes and N for No: ');
-    performAnotherOperation ? displayBankingOptions() : console.log('\nThank you for using this app. Goodbye!...');
+    if(performAnotherOperation){
+      displayBankingOptions()
+    } else{ 
+      console.log('\nThank you for using this app. Goodbye!...');
     return;
+  }
   }
 
   let amount = readlineSync.question('Enter Amount: ');
